@@ -1,0 +1,217 @@
+if not ova:
+                n_train = X_train.shape[0]
+                n_test = X_test.shape[0]
+                C = num_classes
+                K_c = self.compute_covariance_matrix (X_train, X_train)
+                K = np.zeros((C*n_train, C*n_train))
+                for c in range(C):
+                    K[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train] = K_c
+                y = Y_train.T.flatten()
+                f = np.zeros(C*n_train)
+
+                R = np.zeros((C*n_train, n_train))
+                for c in range(C):
+                    R[c*n_train:(c+1)*n_train, :] = np.identity(n_train)
+
+                count = 0
+                while True:
+                    f_mat = np.reshape(f, (C, n_train))
+                    pi_mat = np.zeros((C, n_train))
+                    for i in range(n_train):
+                        pi_mat[:, i] = softmax(f_mat[:, i])
+
+                    pi = pi_mat.flatten()
+                    Pi_mat = np.zeros((C*n_train, n_train))
+                    for c in range(C):
+                        diag_pi = np.diag(pi_mat[c])
+                        Pi_mat[c*n_train:(c+1)*n_train, :] = diag_pi
+
+
+                    Z = np.zeros(C)
+                    E = np.zeros((C*n_train, C*n_train))
+                    D = np.diag(pi)
+                    for c in range(C):
+                        D_c = np.diag(pi)[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train]
+                        D_c_sqrt = np.power(D_c, .5)
+                        K_c = K[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train]
+                        L = la.cholesky(np.identity(n_train) + D_c_sqrt @ K_c @ D_c_sqrt, lower=True)
+                        E[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train] = D_c_sqrt @ L.T @ L @ D_c_sqrt
+                        Z[c] = np.sum(np.array([np.log(L[i][i]) for i in range(n_train)]))
+
+                    M = np.zeros((n_train, n_train))
+                    for c in range(C):
+                        M += E[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train]
+                    M = la.cholesky(M, lower=True)
+
+                    count += 1 
+                    if count > 100:
+                        break
+
+                    b = (D - Pi_mat@Pi_mat.T)@f + y - pi
+                    c = E @ K @ b
+                    a = b - c + E @ R @ M.T @ M @ R.T @ c
+                    f = K @ a
+
+                mu_test = np.zeros(C)
+                k_test = self.compute_covariance_matrix(X_test, X_train)
+                Sigma = np.zeros((C, C))
+
+                pi_mat = np.zeros((n_test, C))
+
+                for test_num in range(n_test):
+                    x_test = X_test[test_num]
+                    for c in range(C):
+                        mu_test[c] = np.dot(y[c*n_train:(c+1)*n_train] - pi[c*n_train:(c+1)*n_train], 
+                                                                  k_test[test_num])
+                        #E_c = E[c*n_train:(c+1)*n_train, c*n_train:(c+1)*n_train]
+                        print(E.shape, k_test[test_num].shape)
+                        b = E @ k_test[test_num]
+                        #print(E_c.shape, R.shape, (M.T).shape, M.shape, (R.T).shape, b.shape)
+                        c_vec = E  @ R @ M.T @ M @ R.T @ b
+                        for c_dash in range(C):
+                            Sigma[c][c_dash] = np.dot(c_vec, k_test[test_num])
+                        Sigma[c][c] += self.compute_variance(x_test, x_test) - np.dot(b, k_test[test_num])
+
+                    pi_test = np.zeros(C)
+                    S = 100
+                    for i in range(S):
+                        f_test = MVN.rvs(mu_test, Sigma)
+                        pi_test += softmax(f_test)
+
+                    pi_test = pi_test / S
+                    pi_mat[test_num] = pi_test
+
+                return pi_mat
+                
+                
+                
+if num_classes == 2:
+            n_train = X_train.shape[0]
+            n_test = X_test.shape[0]
+            eps = 10e-6
+            f = np.zeros(n_train)
+            fs = [f]
+            K = self.compute_covariance_matrix (X_train, X_train)
+            tol = .1
+            eps = .001
+            count = 0
+            while True:
+                pi = np.array([expit(f[i]) for i in range(n_train)])
+                t = Y_train
+                H = np.diag([-pi[i]*(1 - pi[i]) for i in range(n_train)])
+                W = -H
+                Z = np.power(W, 1/2)
+                L = la.cholesky((eps+1)*np.identity(n_train) + Z @ K @
+                                Z, lower=True)
+                grad = t - pi
+                b = W @ f + grad
+                
+                a = b - Z @ L.T @ L @ Z @ K @ b
+                f = K @ a
+                fs.append(f)
+                if la.norm(fs[-1] - fs[-2]) < tol:
+                    break
+                print(fs[-1])
+                
+            
+            f_hat = fs[-1]
+            Z= np.power (W, 1/2)
+            L = la.cholesky((1+eps)*np.identity(n_train) + Z@K@Z)
+            f_test = np.zeros(n_test)
+            pi_test = np.zeros(n_test)
+            cov_X_test_train = self.compute_covariance_matrix (X_test, X_train)
+            cov_X_test_test = self.compute_covariance_matrix (X_test, X_test)
+            t = (Y_train + np.ones(n_train))/2
+            pi = expit(f_hat)
+            grad = t - pi
+            for i in range(n_test):
+                f_test[i] = np.dot(cov_X_test_train[i], grad)
+                v = L @ np.power(W, 1/2) @ cov_X_test_train[i]
+                V = cov_X_test_test[i][i] - np.dot(v, v)
+                def func(z):
+                    return expit(z) * norm.pdf(z, loc=f_test[i], scale=np.sqrt(V))
+                pi_test[i] = quad(func, -np.inf, np.inf)[0]
+                
+            return pi_test
+            
+            
+            
+            
+            
+        while True:
+                f_copy = np.copy(fs[-1])
+                pi = expit(f_copy)
+                grad = Y_train - pi
+                '''
+                H = np.diag(np.array([-pi[i]*(1-pi[i]) for i in range(n_train)]))
+                W = -H
+                W_half = np.power(W, .5)
+                L = la.cholesky(I + W_half @ K @ W_half, lower=True)
+                b = W @ f_copy + grad
+                a = b - W_half @ L.T @ L @ W_half @ K @ b
+                f_copy = K @ a
+                fs.append(f_copy)
+                #print(f_copy)
+                #time.sleep(2)
+                if la.norm(fs[-1] - fs[-2]) < tol:
+                    break
+                count += 1
+                if count % 100 == 0:
+                    print ("Count >", count)
+                '''
+                
+                f_copy += eta*(grad - la.inv(K) @ f_copy)
+                fs.append(f_copy)
+                if max(abs(fs[-1] - fs[-2])) < tol:
+                    break
+                    
+                    
+                    
+                    
+                    
+if not lsc:
+                n_train = X_train.shape[0]
+                n_test = X_test.shape[0]
+                tol = 10e-10
+                eps = 10e-2
+                eta = 10e-7
+                f0 = np.zeros(n_train)
+                K = self.compute_covariance_matrix(X_train, X_train) + eps*np.identity(n_train)
+                K_inv = la.inv(K)
+                I = np.identity(n_train)
+                def psi(f):
+                    log_total = 0
+                    for i in range(n_train):
+                        if Y_train[i] == 1:
+                            log_total -= np.log(1 + np.exp(-f[i]))
+                        else:
+                            log_total -= np.log(1 + np.exp(f[i]))
+
+                    return -log_total + 1/2 * np.dot(f, la.inv(K) @ f) + 1/2*np.log(abs(la.det(K))) + n_train/2*np.log(2*np.pi)
+
+                B = 1000
+                f_values = np.zeros((B, n_train))
+                for i in range(B):
+                    f_values[i] = MVN.rvs(mean=f0, cov=100)
+                psi_values = np.zeros(B)
+                for i in range(B):
+                    psi_values[i] = psi(f_values[i])
+
+                min_index = np.argmin(psi_values)
+                f = f_values[min_index]
+
+
+                k_test = self.compute_covariance_matrix(X_test, X_train)
+                Y_estimates = np.zeros(n_test)
+                pi_test = np.zeros(n_test)
+
+                for i in range(n_test):
+                    f_test = np.dot(k_test[i], K_inv @ f)
+                    p = expit(f_test)
+                    pi_test[i] = p
+                    if p < .5:
+                        Y_estimates[i] = 0
+                    else:
+                        Y_estimates[i] = 1
+
+                return Y_estimates
