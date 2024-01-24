@@ -1,0 +1,3 @@
+,model,word_scrambling,reading_comprehension,polynomial_minima,total
+0,mixture-of-experts,100.0%,47.06%,93.75%,80.0%
+1,gpt-3.5,17.65%,88.24%,75.0%,60.0%

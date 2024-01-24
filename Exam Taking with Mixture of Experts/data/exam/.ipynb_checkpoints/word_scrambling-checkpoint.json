@@ -1,0 +1,121 @@
+[
+    {
+        "correct_answer": "D",
+        "question": "Find the right word for 'boderr'.\nA: bdoerr\nB: petite\nC: oceania\nD: border",
+        "word": "border",
+        "scrambled": "boderr",
+        "prediction": " D"
+    },
+    {
+        "correct_answer": "C",
+        "question": "What word does 'tlriaer' represent when unscrambled?\nA: nevertheless\nB: write\nC: trailer\nD: taelrlr",
+        "word": "trailer",
+        "scrambled": "tlriaer",
+        "prediction": " C"
+    },
+    {
+        "correct_answer": "B",
+        "question": "What word does 'ceruvs' represent when unscrambled?\nA: failing\nB: curves\nC: assuming\nD: cursed",
+        "word": "curves",
+        "scrambled": "ceruvs",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "B",
+        "question": "Rearrange the letters in 'sehlf' to form the correct word.\nA: minds\nB: shelf\nC: slhef\nD: aquarium",
+        "word": "shelf",
+        "scrambled": "sehlf",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "A",
+        "question": "Find the right word for 'begie'.\nA: beige\nB: impact\nC: cruises\nD: bgiee",
+        "word": "beige",
+        "scrambled": "begie",
+        "prediction": " a"
+    },
+    {
+        "correct_answer": "B",
+        "question": "Find the right word for 'kiawut'.\nA: sunglasses\nB: kuwait\nC: threats\nD: constructor",
+        "word": "kuwait",
+        "scrambled": "kiawut",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "D",
+        "question": "Decode the word 'rreagded'.\nA: classification\nB: pentium\nC: enormous\nD: regarded",
+        "word": "regarded",
+        "scrambled": "rreagded",
+        "prediction": " d"
+    },
+    {
+        "correct_answer": "B",
+        "question": "Rearrange the letters in 'orbesve' to form the correct word.\nA: fairfield\nB: observe\nC: coupling\nD: diverse",
+        "word": "observe",
+        "scrambled": "orbesve",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "D",
+        "question": "What word does 'bcaks' represent when unscrambled?\nA: hood\nB: tobacco\nC: moon\nD: backs",
+        "word": "backs",
+        "scrambled": "bcaks",
+        "prediction": " d"
+    },
+    {
+        "correct_answer": "A",
+        "question": "Decode the word 'ahoutr'.\nA: author\nB: giving\nC: buffer\nD: aruba",
+        "word": "author",
+        "scrambled": "ahoutr",
+        "prediction": " a"
+    },
+    {
+        "correct_answer": "B",
+        "question": "What word does 'veertan' represent when unscrambled?\nA: adequately\nB: veteran\nC: reasonably\nD: combining",
+        "word": "veteran",
+        "scrambled": "veertan",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "D",
+        "question": "Rearrange the letters in 'ppaadnogra' to form the correct word.\nA: withdrawn\nB: amino\nC: cure\nD: propaganda",
+        "word": "propaganda",
+        "scrambled": "ppaadnogra",
+        "prediction": " d"
+    },
+    {
+        "correct_answer": "B",
+        "question": "What word does 'liimts' represent when unscrambled?\nA: admitted\nB: limits\nC: dates\nD: taylor",
+        "word": "limits",
+        "scrambled": "liimts",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "A",
+        "question": "Can you unscramble 'stnkaig'?\nA: skating\nB: treating\nC: trauma\nD: lambda",
+        "word": "skating",
+        "scrambled": "stnkaig",
+        "prediction": " a"
+    },
+    {
+        "correct_answer": "C",
+        "question": "Find the right word for 'wreran'.\nA: fairfield\nB: asus\nC: warren\nD: drop",
+        "word": "warren",
+        "scrambled": "wreran",
+        "prediction": " c"
+    },
+    {
+        "correct_answer": "B",
+        "question": "What word does 'pierton' represent when unscrambled?\nA: lisa\nB: protein\nC: fuels\nD: torture",
+        "word": "protein",
+        "scrambled": "pierton",
+        "prediction": " b"
+    },
+    {
+        "correct_answer": "C",
+        "question": "Can you unscramble 'bolinggg'?\nA: formulation\nB: dude\nC: blogging\nD: blade",
+        "word": "blogging",
+        "scrambled": "bolinggg",
+        "prediction": " c"
+    }
+]
